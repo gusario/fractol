@@ -6,88 +6,82 @@
 /*   By: srobert- <srobert-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/08 19:32:47 by srobert-          #+#    #+#             */
-/*   Updated: 2019/06/22 20:53:15 by srobert-         ###   ########.fr       */
+/*   Updated: 2019/06/28 08:39:07 by srobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fract.h"
 
-int	close_x(void)
-{
-	exit(0);
-}
-
-int	key_press(int key, t_fractol *f)
+void		reset(int key, t_fract_param *f)
 {
 	if (key == MAIN_PAD_ESC)
 		exit(0);
+	if (key == MAIN_PAD_F)
+	{
+		f->i_max = 50;
+		f->color_palete = 1;
+		f->color_val = 1;
+		f->max_imag = 1.5;
+		f->min_imag = -1.5;
+		f->max_real = 1.0;
+		f->min_real = -2.0;
+	}
+}
+
+static void	move(int key, t_fract_param *f)
+{
+	double	re;
+	double	im;
+
+	im = f->max_imag - f->min_imag;
+	re = f->max_real - f->min_real;
+	if (key == MAIN_PAD_A)
+	{
+		f->max_real -= re * 0.1;
+		f->min_real -= re * 0.1;
+	}
+	if (key == MAIN_PAD_D)
+	{
+		f->max_real += re * 0.1;
+		f->min_real += re * 0.1;
+	}
 	if (key == MAIN_PAD_W)
-    {
-        f->max_imag += (f->max_imag - f->min_imag) * 0.1;
-        f->min_imag += (f->max_imag - f->min_imag) * 0.1;
-    }
-    if (key == MAIN_PAD_S)
-    {
-        f->max_imag -= (f->max_imag - f->min_imag) * 0.1;
-        f->min_imag -= (f->max_imag - f->min_imag) * 0.1;
-    }
-    if (key == MAIN_PAD_A)
-    {
-        f->max_real -= (f->max_real - f->min_real) * 0.1;
-        f->min_real -= (f->max_real - f->min_real) * 0.1;
-    }
-    if (key == MAIN_PAD_D)
-    {
-        f->max_real += (f->max_real - f->min_real) * 0.1;
-        f->min_real += (f->max_real - f->min_real) * 0.1;
-    }
-    if (key == MAIN_PAD_PLUS)
-        f->i_max += 5;
-    if (key == MAIN_PAD_MINUS && f->i_max > 5)
-        f->i_max -= 5;
-    if (key == MAIN_PAD_F)
-        f->psycho = !f->psycho;
-    if (key == MAIN_PAD_X)
-        f->color_val--;
-    if (key == MAIN_PAD_C)
-        f->color_val++;      
-    f->fractal(f);
-    return (0);
-}
-int mouse_move(int x, int y, t_fractol *f)
-{
-    if (x < 0 || x > WIDTH || y < 0 || y > HEIGHT || f->mouse_stop == 1)   
-        return (0);
-    f->jul->ci = (y - HEIGHT / 2) * 0.002;
-    f->jul->cr = (x - WIDTH / 2) * 0.002;
-    f->fractal(f);
-    return (0);
+	{
+		f->max_imag -= im * 0.1;
+		f->min_imag -= im * 0.1;
+	}
+	if (key == MAIN_PAD_S)
+	{
+		f->max_imag += im * 0.1;
+		f->min_imag += im * 0.1;
+	}
 }
 
-int mouse_zoom(int key, int x, int y, t_fractol *f)
+int			key_press(int key, void *param)
 {
-    double re;
-    double im;
+	void **mass;
 
-    im = (f->max_imag - f->min_imag) * 0.1;
-    re = (f->max_real - f->min_real) * 0.1;
-    
-    if (key == SCROLL_UP)
-    {
-        f->min_imag -= im * (1.0 - (double)y / HEIGHT);
-        f->max_imag += im * ((double)y / HEIGHT);
-        f->min_real -= re * ((double)x / WIDTH);
-        f->max_real += re * (1.0 - (double)x / WIDTH);
-    }
-    
-    if (key == SCROLL_DOWN)
-    {
-        f->min_imag += im * (1.0 - (double)y / HEIGHT);
-        f->max_imag -= im * ((double)y / HEIGHT);
-        f->min_real += re * ((double)x / WIDTH);     
-        f->max_real -= re * (1.0 - (double)x / WIDTH);
-        
-    }   
-    f->fractal(f);
-    return (0);
+	mass = (void**)param;
+	if (chill(key) == 1)
+		return (0);
+	move(key, mass[0]);
+	reset(key, mass[0]);
+	swap_fractal(key, mass[0]);
+	if (key == MAIN_PAD_PLUS)
+		((t_fract_param*)(mass[0]))->i_max += 5;
+	if (key == MAIN_PAD_MINUS && ((t_fract_param*)(mass[0]))->i_max > 1)
+		((t_fract_param*)(mass[0]))->i_max -= 5;
+	if (key == MAIN_PAD_X)
+		((t_fract_param*)(mass[0]))->color_val--;
+	if (key == MAIN_PAD_C)
+		((t_fract_param*)(mass[0]))->color_val++;
+	if (key == MAIN_PAD_P)
+		((t_fract_param*)(mass[0]))->color_palete =
+		!((t_fract_param*)(mass[0]))->color_palete;
+	if (key == MAIN_PAD_MORE)
+		((t_fract_param*)(mass[0]))->multi_power++;
+	if (key == MAIN_PAD_LESS)
+		((t_fract_param*)(mass[0]))->multi_power--;
+	draw_fractal(mass[1], mass[2], mass[0], mass[3]);
+	return (0);
 }

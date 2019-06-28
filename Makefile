@@ -6,15 +6,15 @@
 #    By: srobert- <srobert-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/19 20:53:55 by david             #+#    #+#              #
-#    Updated: 2019/06/22 21:00:18 by srobert-         ###   ########.fr        #
+#    Updated: 2019/06/28 07:52:55 by srobert-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
 CC = gcc
-FLAGS = -g
-LIBRARIES = -lmlx -lm -lft -L$(LIBFT_DIR) -L$(MINILIBX_DIR) -framework OpenGL -framework Appkit
+FLAGS = -Wall -Werror -Wextra
+LIBRARIES = -lmlx -lm -lft -L$(LIBFT_DIR) -L$(MINILIBX_DIR) -framework OpenGL -framework Appkit  -framework OpenCL 
 INCLUDES = -I$(HEADERS_DIR) -I$(LIBFT_HEAD) -I$(MINILIBX_HEAD)
 
 LIBFT_DIR = ./libft/
@@ -30,7 +30,7 @@ HEADERS_DIR = ./includes/
 HEADERS = $(addprefix $(HEADERS_DIR), $(HEADERS_LIST))
 
 SRCS_DIR = ./srcs/
-SRCS_LIST = main.c util.c init.c draw.c mandelbrot.c julia.c control.c burningship.c
+SRCS_LIST = main.c util.c init.c weird_shit4cl.c control.c control2.c
 SRCS = $(addprefix $(SRCS_DIR), $(SRCS_LIST))
 
 OBJ_DIR = obj/

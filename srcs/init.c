@@ -6,79 +6,59 @@
 /*   By: srobert- <srobert-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 20:36:42 by david             #+#    #+#             */
-/*   Updated: 2019/06/22 19:25:31 by srobert-         ###   ########.fr       */
+/*   Updated: 2019/06/28 06:35:13 by srobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fract.h"
 
-static t_coord *init_mandel()
+t_coord			*init_coord(void)
 {
-    t_coord *m;
-    
-    if (!(m = (t_coord*)malloc(sizeof(t_coord))))
-        terminate("Malloc error\n");
-    m->ci = 0;
-    m->cr = 0;
-    m->zi = 0;
-    m->zr = 0;
-    m->tmp = 0;
-    return(m);  
+	t_coord *j;
+
+	if (!(j = (t_coord*)malloc(sizeof(t_coord))))
+		terminate("Malloc error\n");
+	j->ci = 0.27105;
+	j->cr = -0.7;
+	j->zi = 0;
+	j->zr = 0;
+	j->tmp = 0;
+	return (j);
 }
 
-static t_coord *init_burningship()
+t_fractol		*fract_init(void)
 {
-    t_coord *m;
-    
-    if (!(m = (t_coord*)malloc(sizeof(t_coord))))
-        terminate("Malloc error\n");
-    m->ci = 0;
-    m->cr = 0;
-    m->zi = 0;
-    m->zr = 0;
-    m->tmp = 0;
-    return(m);  
+	t_fractol *f;
+
+	if (!(f = (t_fractol*)malloc(sizeof(t_fractol))))
+		terminate("Malloc error\n");
+	f->mlx = mlx_init();
+	f->img = mlx_new_image(f->mlx, WIDTH, HEIGHT);
+	f->data_addr = mlx_get_data_addr(f->img, &(f->bpp), &(f->size_line),
+	&(f->endian));
+	f->win = mlx_new_window(f->mlx, WIDTH, HEIGHT, "fract'ol");
+	f->mouse_stop = 1;
+	f->x_start = -1;
+	f->y_start = -1;
+	return (f);
 }
 
-static t_coord *init_julia()
+t_fract_param	*param_init(void)
 {
-    t_coord *j;
-    
-    if (!(j = (t_coord*)malloc(sizeof(t_coord))))
-        terminate("Malloc error\n");
-    j->ci = 0;
-    j->cr = 0;
-    j->zi = 0;
-    j->zr = 0;
-    j->tmp = 0;
-    return(j);
-}
+	t_fract_param *f;
 
-t_fractol *fract_init()
-{
-    t_fractol *f;
-    if(!(f = (t_fractol*)malloc(sizeof(t_fractol))))
-        terminate("Malloc error\n");
-    f->x = -1;
-    f->y = -1;
-    f->z = 150;
-    f->option_x = WIDTH / 2;
-    f->option_y = HEIGHT / 2;
-    f->color_max = 0X000000;
-    f->mlx = mlx_init();
-    f->i_max = 40;
-    f->mouse_stop = 0;
-    f->zoom = 0.7;
-    f->psycho = 0;
-    f->color_val = 1;
-    f->max_imag = 1.5;
-    f->min_imag = -1.5;
-    f->max_real = 1.0;
-    f->min_real = -2.0;
-    f->img = mlx_new_image(f->mlx, WIDTH, HEIGHT);
-    f->data_addr = mlx_get_data_addr(f->img, &(f->bpp), &(f->size_line), &(f->endian));
-    f->jul = init_julia();
-    f->mdb = init_mandel();
-    f->ship = init_burningship();
-    return(f);
+	if (!(f = (t_fract_param*)malloc(sizeof(t_fract_param))))
+		terminate("Malloc error\n");
+	f->i_max = 50;
+	f->color_palete = 1;
+	f->color_val = 1;
+	f->max_imag = 1.5;
+	f->min_imag = -1.5;
+	f->max_real = 1.0;
+	f->min_real = -2.0;
+	f->color_max = 0xFFFFFF;
+	f->height = HEIGHT;
+	f->width = WIDTH;
+	f->multi_power = 2;
+	return (f);
 }
