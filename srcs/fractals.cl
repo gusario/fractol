@@ -1,4 +1,3 @@
-
 struct RGB
 {
     unsigned char R;
@@ -340,52 +339,13 @@ void dickship(__global int *res, t_fract_param *f)
     {
         ship.tmp = ship.zr;
         ship.zr = ship.zr * ship.zr - ship.zi * ship.zi + ship.cr;
-        ship.zi = 2 * fabs(ship.tmp) * ship.zi + ship.ci;
+        ship.zi = 2 * fabs(ship.zi) * ship.tmp + ship.ci;
         if (ship.zr * ship.zr + ship.zi * ship.zi > 4)
             break;
     }
 
     res[f->width * (f->height - y) + x] = get_color(f, i, ship.zr * ship.zr + ship.zi * ship.zi);
 }
-
-
-
-// void	put_xernya(t_screen scr, int WIN_X, int WIN_Y, __global int *res)
-// {
-// 	int			x;
-// 	int			y;
-// 	int			iter;
-// 	double		step_i;
-// 	double		step_r;
-// 	double		res_i;
-// 	double		res_r;
-// 	double		r;
-// 	double		i;
-// 	double		dbl_i;
-// 	t_point		point;
-
-//     x = get_global_id(0);
-//     y = get_global_id(1);
-// 	step_i = (scr.max_i - scr.min_i) / WIN_Y;
-// 	step_r = (scr.max_r - scr.min_r) / WIN_X;
-// 	i = scr.jul_im;
-// 	r = scr.jul_re;
-// 	res_i = scr.max_i - step_i * y;
-// 	res_r = scr.min_r + step_r * x;
-// 	point.x = x;
-// 	point.y = WIN_Y - y;
-// 	iter = -1;
-// 	while (++iter < scr.iter)
-// 	{
-// 		dbl_i = res_i;
-// 		res_i = 3 * res_r * res_i * res_r - res_i * res_i * res_i + i;
-// 		res_r = res_r * res_r * res_r - 3 * dbl_i * dbl_i * res_r + r - 1;
-// 		if (fabs(res_r) > 50 && fabs(res_i) > 2500)
-// 			break;
-// 	}
-// 	point.color = get_color(iter, &scr, res_i * res_i + res_r * res_r);
-// 	res[WIN_X * (WIN_Y - y) + x] = point.color;
-// }
 
 void biomorph(__global int *res, t_fract_param *f, t_coord *bio)
 {

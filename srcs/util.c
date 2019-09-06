@@ -6,7 +6,7 @@
 /*   By: srobert- <srobert-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/19 19:01:56 by david             #+#    #+#             */
-/*   Updated: 2019/06/28 08:57:01 by srobert-         ###   ########.fr       */
+/*   Updated: 2019/09/06 18:06:22 by srobert-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,6 @@ void	terminate(char *s)
 		ft_putendl_fd(s, 2);
 	else
 		perror(s);
+	sleep(100000);
 	exit(1);
 }
